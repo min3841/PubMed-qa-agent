@@ -1,0 +1,154 @@
+﻿index,pubid,question,gold_label,condition,candidate_count,selected_pmids,retrieval_hit,prediction,is_valid,input_tokens,output_tokens,total_tokens,latency_sec,is_correct
+1,21645374,Do mitochondria play a role in remodelling lace plant leaves during programmed cell death?,yes,pubmed_native_top3,1,21645374,TRUE,yes,TRUE,597,174,771,3.97,TRUE
+1,21645374,Do mitochondria play a role in remodelling lace plant leaves during programmed cell death?,yes,pubmed_cosine_top3,1,21645374,TRUE,yes,TRUE,597,93,690,1.433,TRUE
+1,21645374,Do mitochondria play a role in remodelling lace plant leaves during programmed cell death?,yes,pubmed_cosine_top1,1,21645374,TRUE,yes,TRUE,597,172,769,3.199,TRUE
+2,16418930,Landolt C and snellen e acuity: differences in strabismus amblyopia?,no,pubmed_native_top3,0,,FALSE,maybe,TRUE,82,188,270,2.032,FALSE
+2,16418930,Landolt C and snellen e acuity: differences in strabismus amblyopia?,no,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,82,156,238,1.876,FALSE
+2,16418930,Landolt C and snellen e acuity: differences in strabismus amblyopia?,no,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,82,162,244,4.652,FALSE
+3,9488747,"Syncope during bathing in infants, a pediatric form of water-induced urticaria?",yes,pubmed_native_top3,1,9488747,TRUE,maybe,TRUE,355,433,788,4.813,FALSE
+3,9488747,"Syncope during bathing in infants, a pediatric form of water-induced urticaria?",yes,pubmed_cosine_top3,1,9488747,TRUE,maybe,TRUE,355,272,627,2.647,FALSE
+3,9488747,"Syncope during bathing in infants, a pediatric form of water-induced urticaria?",yes,pubmed_cosine_top1,1,9488747,TRUE,yes,TRUE,355,292,647,3.242,TRUE
+4,17208539,Are the long-term results of the transanal pull-through equal to those of the transabdominal pull-through?,no,pubmed_native_top3,1,17208539,TRUE,no,TRUE,524,360,884,2.929,TRUE
+4,17208539,Are the long-term results of the transanal pull-through equal to those of the transabdominal pull-through?,no,pubmed_cosine_top3,1,17208539,TRUE,no,TRUE,524,266,790,2.741,TRUE
+4,17208539,Are the long-term results of the transanal pull-through equal to those of the transabdominal pull-through?,no,pubmed_cosine_top1,1,17208539,TRUE,no,TRUE,524,253,777,4.212,TRUE
+5,10808977,Can tailored interventions increase mammography use among HMO women?,yes,pubmed_native_top3,10,212756491719635000000000,FALSE,yes,TRUE,1117,272,1389,2.67,TRUE
+5,10808977,Can tailored interventions increase mammography use among HMO women?,yes,pubmed_cosine_top3,10,117490951457242000000000,TRUE,yes,TRUE,1189,427,1616,3.129,TRUE
+5,10808977,Can tailored interventions increase mammography use among HMO women?,yes,pubmed_cosine_top1,10,11749095,FALSE,yes,TRUE,403,793,1196,4.814,TRUE
+6,23831910,Double balloon enteroscopy: is it efficacious and safe in a community setting?,yes,pubmed_native_top3,0,,FALSE,maybe,TRUE,79,151,230,1.646,FALSE
+6,23831910,Double balloon enteroscopy: is it efficacious and safe in a community setting?,yes,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,79,124,203,1.578,FALSE
+6,23831910,Double balloon enteroscopy: is it efficacious and safe in a community setting?,yes,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,79,150,229,1.856,FALSE
+7,26037986,30-Day and 1-year mortality in emergency general surgery laparotomies: an area of concern and need for improvement?,maybe,pubmed_native_top3,1,26037986,TRUE,yes,TRUE,457,228,685,3.556,FALSE
+7,26037986,30-Day and 1-year mortality in emergency general surgery laparotomies: an area of concern and need for improvement?,maybe,pubmed_cosine_top3,1,26037986,TRUE,yes,TRUE,457,258,715,1.963,FALSE
+7,26037986,30-Day and 1-year mortality in emergency general surgery laparotomies: an area of concern and need for improvement?,maybe,pubmed_cosine_top1,1,26037986,TRUE,yes,TRUE,457,287,744,1.969,FALSE
+8,26852225,Is adjustment for reporting heterogeneity necessary in sleep disorders?,no,pubmed_native_top3,4,416466684121236000000000,FALSE,yes,TRUE,1768,826,2594,7.066,FALSE
+8,26852225,Is adjustment for reporting heterogeneity necessary in sleep disorders?,no,pubmed_cosine_top3,4,268522253764288000000000,TRUE,no,TRUE,1772,233,2005,2.186,TRUE
+8,26852225,Is adjustment for reporting heterogeneity necessary in sleep disorders?,no,pubmed_cosine_top1,4,26852225,TRUE,no,TRUE,486,166,652,1.834,TRUE
+9,17113061,Do mutations causing low HDL-C promote increased carotid intima-media thickness?,no,pubmed_native_top3,1,17113061,TRUE,no,TRUE,325,151,476,2.201,TRUE
+9,17113061,Do mutations causing low HDL-C promote increased carotid intima-media thickness?,no,pubmed_cosine_top3,1,17113061,TRUE,no,TRUE,325,155,480,2.331,TRUE
+9,17113061,Do mutations causing low HDL-C promote increased carotid intima-media thickness?,no,pubmed_cosine_top1,1,17113061,TRUE,no,TRUE,325,253,578,2.108,TRUE
+10,10966337,A short stay or 23-hour ward in a general and academic children's hospital: are they effective?,yes,pubmed_native_top3,0,,FALSE,maybe,TRUE,83,117,200,1.429,FALSE
+10,10966337,A short stay or 23-hour ward in a general and academic children's hospital: are they effective?,yes,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,83,152,235,2.242,FALSE
+10,10966337,A short stay or 23-hour ward in a general and academic children's hospital: are they effective?,yes,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,83,123,206,1.551,FALSE
+11,25432938,Did Chile's traffic law reform push police enforcement?,yes,pubmed_native_top3,1,25432938,TRUE,yes,TRUE,428,198,626,1.864,TRUE
+11,25432938,Did Chile's traffic law reform push police enforcement?,yes,pubmed_cosine_top3,1,25432938,TRUE,yes,TRUE,428,593,1021,3.617,TRUE
+11,25432938,Did Chile's traffic law reform push police enforcement?,yes,pubmed_cosine_top1,1,25432938,TRUE,yes,TRUE,428,291,719,2.858,TRUE
+12,18847643,Therapeutic anticoagulation in the trauma patient: is it safe?,no,pubmed_native_top3,10,425417734234454000000000,FALSE,maybe,TRUE,1469,911,2380,5.64,FALSE
+12,18847643,Therapeutic anticoagulation in the trauma patient: is it safe?,no,pubmed_cosine_top3,10,422337074234454000000000,FALSE,maybe,TRUE,1311,753,2064,6.132,FALSE
+12,18847643,Therapeutic anticoagulation in the trauma patient: is it safe?,no,pubmed_cosine_top1,10,42233707,FALSE,maybe,TRUE,416,361,777,2.908,FALSE
+13,18239988,Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?,yes,pubmed_native_top3,2,2467571518239980,TRUE,no,TRUE,931,695,1626,3.981,FALSE
+13,18239988,Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?,yes,pubmed_cosine_top3,2,1823998824675710,TRUE,no,TRUE,931,371,1302,3.305,FALSE
+13,18239988,Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?,yes,pubmed_cosine_top1,2,18239988,TRUE,no,TRUE,503,254,757,2.445,FALSE
+14,25957366,Prompting Primary Care Providers about Increased Patient Risk As a Result of Family History: Does It Work?,no,pubmed_native_top3,1,25957366,TRUE,no,TRUE,462,184,646,3.248,TRUE
+14,25957366,Prompting Primary Care Providers about Increased Patient Risk As a Result of Family History: Does It Work?,no,pubmed_cosine_top3,1,25957366,TRUE,no,TRUE,462,165,627,2.198,TRUE
+14,25957366,Prompting Primary Care Providers about Increased Patient Risk As a Result of Family History: Does It Work?,no,pubmed_cosine_top1,1,25957366,TRUE,no,TRUE,462,169,631,1.652,TRUE
+15,24866606,Do emergency ultrasound fellowship programs impact emergency medicine residents' ultrasound education?,yes,pubmed_native_top3,10,427052474261266000000000,FALSE,maybe,TRUE,2560,204,2764,2.118,FALSE
+15,24866606,Do emergency ultrasound fellowship programs impact emergency medicine residents' ultrasound education?,yes,pubmed_cosine_top3,10,407048734222949000000000,FALSE,maybe,TRUE,2347,563,2910,15.763,FALSE
+15,24866606,Do emergency ultrasound fellowship programs impact emergency medicine residents' ultrasound education?,yes,pubmed_cosine_top1,10,40704873,FALSE,maybe,TRUE,411,475,886,4.132,FALSE
+16,26578404,Patient-Controlled Therapy of Breathlessness in Palliative Care: A New Therapeutic Concept for Opioid Administration?,yes,pubmed_native_top3,1,26578404,TRUE,yes,TRUE,587,250,837,2.307,TRUE
+16,26578404,Patient-Controlled Therapy of Breathlessness in Palliative Care: A New Therapeutic Concept for Opioid Administration?,yes,pubmed_cosine_top3,1,26578404,TRUE,yes,TRUE,587,351,938,3.043,TRUE
+16,26578404,Patient-Controlled Therapy of Breathlessness in Palliative Care: A New Therapeutic Concept for Opioid Administration?,yes,pubmed_cosine_top1,1,26578404,TRUE,yes,TRUE,587,513,1100,4.826,TRUE
+17,11729377,Is there still a need for living-related liver transplantation in children?,yes,pubmed_native_top3,0,,FALSE,maybe,TRUE,76,155,231,1.666,FALSE
+17,11729377,Is there still a need for living-related liver transplantation in children?,yes,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,76,124,200,1.55,FALSE
+17,11729377,Is there still a need for living-related liver transplantation in children?,yes,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,76,109,185,1.528,FALSE
+18,17096624,Do patterns of knowledge and attitudes exist among unvaccinated seniors?,yes,pubmed_native_top3,2,3136960817096620,TRUE,yes,TRUE,753,193,946,2.371,TRUE
+18,17096624,Do patterns of knowledge and attitudes exist among unvaccinated seniors?,yes,pubmed_cosine_top3,2,1709662431369600,TRUE,yes,TRUE,753,213,966,2.433,TRUE
+18,17096624,Do patterns of knowledge and attitudes exist among unvaccinated seniors?,yes,pubmed_cosine_top1,2,17096624,TRUE,yes,TRUE,261,183,444,3.156,TRUE
+19,22694248,Is there a model to teach and practice retroperitoneoscopic nephrectomy?,yes,pubmed_native_top3,0,,FALSE,maybe,TRUE,79,175,254,1.834,FALSE
+19,22694248,Is there a model to teach and practice retroperitoneoscopic nephrectomy?,yes,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,79,152,231,1.475,FALSE
+19,22694248,Is there a model to teach and practice retroperitoneoscopic nephrectomy?,yes,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,79,153,232,3.151,FALSE
+20,22990761,Cardiovascular risk in a rural adult West African population: is resting heart rate also relevant?,yes,pubmed_native_top3,0,,FALSE,maybe,TRUE,82,185,267,9.323,FALSE
+20,22990761,Cardiovascular risk in a rural adult West African population: is resting heart rate also relevant?,yes,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,82,234,316,2.327,FALSE
+20,22990761,Cardiovascular risk in a rural adult West African population: is resting heart rate also relevant?,yes,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,82,208,290,3.004,FALSE
+21,19394934,Israeli hospital preparedness for terrorism-related multiple casualty incidents: can the surge capacity and injury severity distribution be better predicted?,yes,pubmed_native_top3,1,19394934,TRUE,yes,TRUE,485,238,723,2.194,TRUE
+21,19394934,Israeli hospital preparedness for terrorism-related multiple casualty incidents: can the surge capacity and injury severity distribution be better predicted?,yes,pubmed_cosine_top3,1,19394934,TRUE,yes,TRUE,485,425,910,2.809,TRUE
+21,19394934,Israeli hospital preparedness for terrorism-related multiple casualty incidents: can the surge capacity and injury severity distribution be better predicted?,yes,pubmed_cosine_top1,1,19394934,TRUE,yes,TRUE,485,328,813,2.334,TRUE
+22,11481599,Acute respiratory distress syndrome in children with malignancy--can we predict outcome?,yes,pubmed_native_top3,1,11481599,TRUE,yes,TRUE,357,229,586,2.385,TRUE
+22,11481599,Acute respiratory distress syndrome in children with malignancy--can we predict outcome?,yes,pubmed_cosine_top3,1,11481599,TRUE,yes,TRUE,357,194,551,2.575,TRUE
+22,11481599,Acute respiratory distress syndrome in children with malignancy--can we predict outcome?,yes,pubmed_cosine_top1,1,11481599,TRUE,yes,TRUE,357,220,577,2.139,TRUE
+23,21669959,Secondhand smoke risk in infants discharged from an NICU: potential for significant health disparities?,yes,pubmed_native_top3,1,21669959,TRUE,yes,TRUE,461,182,643,2.099,TRUE
+23,21669959,Secondhand smoke risk in infants discharged from an NICU: potential for significant health disparities?,yes,pubmed_cosine_top3,1,21669959,TRUE,yes,TRUE,461,186,647,5.769,TRUE
+23,21669959,Secondhand smoke risk in infants discharged from an NICU: potential for significant health disparities?,yes,pubmed_cosine_top1,1,21669959,TRUE,yes,TRUE,461,231,692,2.793,TRUE
+24,23806388,Do nomograms designed to predict biochemical recurrence (BCR) do a better job of predicting more clinically relevant prostate cancer outcomes than BCR?,yes,pubmed_native_top3,0,,FALSE,maybe,TRUE,91,172,263,2.192,FALSE
+24,23806388,Do nomograms designed to predict biochemical recurrence (BCR) do a better job of predicting more clinically relevant prostate cancer outcomes than BCR?,yes,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,91,163,254,1.872,FALSE
+24,23806388,Do nomograms designed to predict biochemical recurrence (BCR) do a better job of predicting more clinically relevant prostate cancer outcomes than BCR?,yes,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,91,179,270,1.999,FALSE
+25,17919952,Are reports of mechanical dysfunction in chronic oro-facial pain related to somatisation?,yes,pubmed_native_top3,1,17919952,TRUE,yes,TRUE,485,188,673,1.871,TRUE
+25,17919952,Are reports of mechanical dysfunction in chronic oro-facial pain related to somatisation?,yes,pubmed_cosine_top3,1,17919952,TRUE,maybe,TRUE,485,512,997,3.456,FALSE
+25,17919952,Are reports of mechanical dysfunction in chronic oro-facial pain related to somatisation?,yes,pubmed_cosine_top1,1,17919952,TRUE,yes,TRUE,485,261,746,2.273,TRUE
+26,10966943,Amblyopia: is visual loss permanent?,no,pubmed_native_top3,8,417889334176167000000000,FALSE,yes,TRUE,1355,526,1881,4.452,FALSE
+26,10966943,Amblyopia: is visual loss permanent?,no,pubmed_cosine_top3,8,410042044176167000000000,FALSE,yes,TRUE,1732,589,2321,4.299,FALSE
+26,10966943,Amblyopia: is visual loss permanent?,no,pubmed_cosine_top1,8,41004204,FALSE,yes,TRUE,475,495,970,3.239,FALSE
+27,23690198,Implementation of epidural analgesia for labor: is the standard of effective analgesia reachable in all women?,yes,pubmed_native_top3,0,,FALSE,maybe,TRUE,84,179,263,2.574,FALSE
+27,23690198,Implementation of epidural analgesia for labor: is the standard of effective analgesia reachable in all women?,yes,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,84,171,255,2.642,FALSE
+27,23690198,Implementation of epidural analgesia for labor: is the standard of effective analgesia reachable in all women?,yes,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,84,181,265,4.448,FALSE
+28,17940352,Does HER2 immunoreactivity provide prognostic information in locally advanced urothelial carcinoma patients receiving adjuvant M-VEC chemotherapy?,maybe,pubmed_native_top3,1,17940352,TRUE,maybe,TRUE,473,836,1309,5.758,TRUE
+28,17940352,Does HER2 immunoreactivity provide prognostic information in locally advanced urothelial carcinoma patients receiving adjuvant M-VEC chemotherapy?,maybe,pubmed_cosine_top3,1,17940352,TRUE,maybe,TRUE,473,573,1046,4.192,TRUE
+28,17940352,Does HER2 immunoreactivity provide prognostic information in locally advanced urothelial carcinoma patients receiving adjuvant M-VEC chemotherapy?,maybe,pubmed_cosine_top1,1,17940352,TRUE,maybe,TRUE,473,1021,1494,7.041,TRUE
+29,20537205,Is halofantrine ototoxic?,yes,pubmed_native_top3,1,20537205,TRUE,yes,TRUE,322,149,471,1.613,TRUE
+29,20537205,Is halofantrine ototoxic?,yes,pubmed_cosine_top3,1,20537205,TRUE,yes,TRUE,322,135,457,2.193,TRUE
+29,20537205,Is halofantrine ototoxic?,yes,pubmed_cosine_top1,1,20537205,TRUE,yes,TRUE,322,195,517,1.893,TRUE
+30,28707539,Visceral adipose tissue area measurement at a single level: can it represent visceral adipose tissue volume?,yes,pubmed_native_top3,0,,FALSE,maybe,TRUE,84,164,248,2.676,FALSE
+30,28707539,Visceral adipose tissue area measurement at a single level: can it represent visceral adipose tissue volume?,yes,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,84,171,255,2.665,FALSE
+30,28707539,Visceral adipose tissue area measurement at a single level: can it represent visceral adipose tissue volume?,yes,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,84,167,251,1.806,FALSE
+31,7482275,Necrotizing fasciitis: an indication for hyperbaric oxygenation therapy?,no,pubmed_native_top3,10,425394313617342000000000,FALSE,maybe,TRUE,1206,438,1644,3.426,FALSE
+31,7482275,Necrotizing fasciitis: an indication for hyperbaric oxygenation therapy?,no,pubmed_cosine_top3,10,231388654253943000000000,FALSE,no,TRUE,1469,570,2039,4.679,TRUE
+31,7482275,Necrotizing fasciitis: an indication for hyperbaric oxygenation therapy?,no,pubmed_cosine_top1,10,23138865,FALSE,no,TRUE,568,217,785,2.729,TRUE
+32,24183388,Is the Hawkins sign able to predict necrosis in fractures of the neck of the astragalus?,maybe,pubmed_native_top3,0,,FALSE,maybe,TRUE,83,168,251,2.022,TRUE
+32,24183388,Is the Hawkins sign able to predict necrosis in fractures of the neck of the astragalus?,maybe,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,83,150,233,1.663,TRUE
+32,24183388,Is the Hawkins sign able to predict necrosis in fractures of the neck of the astragalus?,maybe,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,83,146,229,2.232,TRUE
+33,9645785,Is a mandatory general surgery rotation necessary in the surgical clerkship?,no,pubmed_native_top3,1,9645785,TRUE,no,TRUE,278,200,478,2.036,TRUE
+33,9645785,Is a mandatory general surgery rotation necessary in the surgical clerkship?,no,pubmed_cosine_top3,1,9645785,TRUE,no,TRUE,278,204,482,2.597,TRUE
+33,9645785,Is a mandatory general surgery rotation necessary in the surgical clerkship?,no,pubmed_cosine_top1,1,9645785,TRUE,no,TRUE,278,239,517,2.673,TRUE
+34,26298839,Is Acupuncture Efficacious for Treating Phonotraumatic Vocal Pathologies?,yes,pubmed_native_top3,1,26298839,TRUE,maybe,TRUE,488,486,974,3.77,FALSE
+34,26298839,Is Acupuncture Efficacious for Treating Phonotraumatic Vocal Pathologies?,yes,pubmed_cosine_top3,1,26298839,TRUE,yes,TRUE,488,440,928,3.33,TRUE
+34,26298839,Is Acupuncture Efficacious for Treating Phonotraumatic Vocal Pathologies?,yes,pubmed_cosine_top1,1,26298839,TRUE,yes,TRUE,488,482,970,4.01,TRUE
+35,24153338,Is aneurysm repair justified for the patients aged 80 or older after aneurysmal subarachnoid hemorrhage?,yes,pubmed_native_top3,10,427141334266539000000000,FALSE,maybe,TRUE,1471,390,1861,3.846,FALSE
+35,24153338,Is aneurysm repair justified for the patients aged 80 or older after aneurysmal subarachnoid hemorrhage?,yes,pubmed_cosine_top3,10,422046474235100000000000,FALSE,maybe,TRUE,1639,502,2141,2.847,FALSE
+35,24153338,Is aneurysm repair justified for the patients aged 80 or older after aneurysmal subarachnoid hemorrhage?,yes,pubmed_cosine_top1,10,42204647,FALSE,maybe,TRUE,792,383,1175,2.548,FALSE
+36,18534072,Do general practice characteristics influence uptake of an information technology (IT) innovation in primary care?,no,pubmed_native_top3,3,405155202788596000000000,TRUE,no,TRUE,24486,441,24927,3.425,TRUE
+36,18534072,Do general practice characteristics influence uptake of an information technology (IT) innovation in primary care?,no,pubmed_cosine_top3,3,185340724051552000000000,TRUE,no,TRUE,24485,385,24870,3.589,TRUE
+36,18534072,Do general practice characteristics influence uptake of an information technology (IT) innovation in primary care?,no,pubmed_cosine_top1,3,18534072,TRUE,no,TRUE,469,188,657,1.976,TRUE
+37,8847047,Prognosis of well differentiated small hepatocellular carcinoma--is well differentiated hepatocellular carcinoma clinically early cancer?,no,pubmed_native_top3,1,8847047,TRUE,no,TRUE,456,138,594,1.687,TRUE
+37,8847047,Prognosis of well differentiated small hepatocellular carcinoma--is well differentiated hepatocellular carcinoma clinically early cancer?,no,pubmed_cosine_top3,1,8847047,TRUE,no,TRUE,456,155,611,3.697,TRUE
+37,8847047,Prognosis of well differentiated small hepatocellular carcinoma--is well differentiated hepatocellular carcinoma clinically early cancer?,no,pubmed_cosine_top1,1,8847047,TRUE,no,TRUE,456,193,649,2.265,TRUE
+38,10575390,Do follow-up recommendations for abnormal Papanicolaou smears influence patient adherence?,no,pubmed_native_top3,5,168819421557250000000000,TRUE,no,TRUE,1358,860,2218,6.489,TRUE
+38,10575390,Do follow-up recommendations for abnormal Papanicolaou smears influence patient adherence?,no,pubmed_cosine_top3,5,93710521057539000000000,TRUE,no,TRUE,1260,802,2062,6.997,TRUE
+38,10575390,Do follow-up recommendations for abnormal Papanicolaou smears influence patient adherence?,no,pubmed_cosine_top1,5,9371052,FALSE,yes,TRUE,331,276,607,2.412,FALSE
+39,20084845,Biomolecular identification of allergenic pollen: a new perspective for aerobiological monitoring?,yes,pubmed_native_top3,0,,FALSE,maybe,TRUE,81,148,229,1.636,FALSE
+39,20084845,Biomolecular identification of allergenic pollen: a new perspective for aerobiological monitoring?,yes,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,81,167,248,1.774,FALSE
+39,20084845,Biomolecular identification of allergenic pollen: a new perspective for aerobiological monitoring?,yes,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,81,157,238,2.045,FALSE
+40,15703931,Does diabetes mellitus influence the efficacy of FDG-PET in the diagnosis of cervical cancer?,no,pubmed_native_top3,1,15703931,TRUE,no,TRUE,548,245,793,2.084,TRUE
+40,15703931,Does diabetes mellitus influence the efficacy of FDG-PET in the diagnosis of cervical cancer?,no,pubmed_cosine_top3,1,15703931,TRUE,no,TRUE,548,301,849,2.633,TRUE
+40,15703931,Does diabetes mellitus influence the efficacy of FDG-PET in the diagnosis of cervical cancer?,no,pubmed_cosine_top1,1,15703931,TRUE,no,TRUE,548,378,926,3.205,TRUE
+41,18269157,Biomechanical and wound healing characteristics of corneas after excimer laser keratorefractive surgery: is there a difference between advanced surface ablation and sub-Bowman's keratomileusis?,yes,pubmed_native_top3,0,,FALSE,maybe,TRUE,102,153,255,1.9,FALSE
+41,18269157,Biomechanical and wound healing characteristics of corneas after excimer laser keratorefractive surgery: is there a difference between advanced surface ablation and sub-Bowman's keratomileusis?,yes,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,102,173,275,3.71,FALSE
+41,18269157,Biomechanical and wound healing characteristics of corneas after excimer laser keratorefractive surgery: is there a difference between advanced surface ablation and sub-Bowman's keratomileusis?,yes,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,102,131,233,1.901,FALSE
+42,25489696,Does radiotherapy of the primary rectal cancer affect prognosis after pelvic exenteration for recurrent rectal cancer?,yes,pubmed_native_top3,2,2548969618663460,TRUE,yes,TRUE,887,222,1109,2.253,TRUE
+42,25489696,Does radiotherapy of the primary rectal cancer affect prognosis after pelvic exenteration for recurrent rectal cancer?,yes,pubmed_cosine_top3,2,2548969618663460,TRUE,yes,TRUE,887,350,1237,2.912,TRUE
+42,25489696,Does radiotherapy of the primary rectal cancer affect prognosis after pelvic exenteration for recurrent rectal cancer?,yes,pubmed_cosine_top1,2,25489696,TRUE,yes,TRUE,516,224,740,2.508,TRUE
+43,14599616,Can a practicing surgeon detect early lymphedema reliably?,maybe,pubmed_native_top3,1,14599616,TRUE,maybe,TRUE,332,550,882,4.25,TRUE
+43,14599616,Can a practicing surgeon detect early lymphedema reliably?,maybe,pubmed_cosine_top3,1,14599616,TRUE,maybe,TRUE,332,752,1084,5.161,TRUE
+43,14599616,Can a practicing surgeon detect early lymphedema reliably?,maybe,pubmed_cosine_top1,1,14599616,TRUE,maybe,TRUE,332,654,986,4.327,TRUE
+44,22537902,Colorectal cancer with synchronous liver metastases: does global management at the same centre improve results?,no,pubmed_native_top3,1,22537902,TRUE,no,TRUE,518,448,966,3.426,TRUE
+44,22537902,Colorectal cancer with synchronous liver metastases: does global management at the same centre improve results?,no,pubmed_cosine_top3,1,22537902,TRUE,no,TRUE,518,334,852,3.107,TRUE
+44,22537902,Colorectal cancer with synchronous liver metastases: does global management at the same centre improve results?,no,pubmed_cosine_top1,1,22537902,TRUE,no,TRUE,518,451,969,3.938,TRUE
+45,19054501,Is motion perception deficit in schizophrenia a consequence of eye-tracking abnormality?,yes,pubmed_native_top3,1,19054501,TRUE,yes,TRUE,425,566,991,3.843,TRUE
+45,19054501,Is motion perception deficit in schizophrenia a consequence of eye-tracking abnormality?,yes,pubmed_cosine_top3,1,19054501,TRUE,yes,TRUE,425,503,928,4.09,TRUE
+45,19054501,Is motion perception deficit in schizophrenia a consequence of eye-tracking abnormality?,yes,pubmed_cosine_top1,1,19054501,TRUE,yes,TRUE,425,322,747,2.57,TRUE
+46,16432652,Transgastric endoscopic splenectomy: is it possible?,yes,pubmed_native_top3,5,361576092258066000000000,FALSE,maybe,TRUE,1218,721,1939,5.65,FALSE
+46,16432652,Transgastric endoscopic splenectomy: is it possible?,yes,pubmed_cosine_top3,5,164326521968340000000000,TRUE,yes,TRUE,1138,330,1468,2.586,TRUE
+46,16432652,Transgastric endoscopic splenectomy: is it possible?,yes,pubmed_cosine_top1,5,16432652,TRUE,yes,TRUE,437,241,678,2.136,TRUE
+47,19504993,It's Fournier's gangrene still dangerous?,yes,pubmed_native_top3,1,19504993,TRUE,yes,TRUE,363,173,536,1.819,TRUE
+47,19504993,It's Fournier's gangrene still dangerous?,yes,pubmed_cosine_top3,1,19504993,TRUE,yes,TRUE,363,237,600,2.459,TRUE
+47,19504993,It's Fournier's gangrene still dangerous?,yes,pubmed_cosine_top1,1,19504993,TRUE,yes,TRUE,363,184,547,1.897,TRUE
+48,20571467,Is it appropriate to implant kidneys from elderly donors in young recipients?,yes,pubmed_native_top3,0,,FALSE,maybe,TRUE,76,115,191,1.601,FALSE
+48,20571467,Is it appropriate to implant kidneys from elderly donors in young recipients?,yes,pubmed_cosine_top3,0,,FALSE,maybe,TRUE,76,121,197,1.791,FALSE
+48,20571467,Is it appropriate to implant kidneys from elderly donors in young recipients?,yes,pubmed_cosine_top1,0,,FALSE,maybe,TRUE,76,110,186,1.434,FALSE
+49,24237112,Do provider service networks result in lower expenditures compared with HMOs or primary care case management in Florida's Medicaid program?,yes,pubmed_native_top3,10,382871403686887000000000,FALSE,maybe,TRUE,1414,304,1718,3.078,FALSE
+49,24237112,Do provider service networks result in lower expenditures compared with HMOs or primary care case management in Florida's Medicaid program?,yes,pubmed_cosine_top3,10,242371122603504000000000,TRUE,yes,TRUE,1034,286,1320,2.294,TRUE
+49,24237112,Do provider service networks result in lower expenditures compared with HMOs or primary care case management in Florida's Medicaid program?,yes,pubmed_cosine_top1,10,24237112,TRUE,maybe,TRUE,434,712,1146,4.483,FALSE
+50,21402341,Assessment of carotid artery stenosis before coronary artery bypass surgery. Is it always necessary?,no,pubmed_native_top3,8,354995002879027000000000,FALSE,no,TRUE,1296,728,2024,6.189,TRUE
+50,21402341,Assessment of carotid artery stenosis before coronary artery bypass surgery. Is it always necessary?,no,pubmed_cosine_top3,8,128329932879027000000000,TRUE,no,TRUE,1057,329,1386,3.104,TRUE
+50,21402341,Assessment of carotid artery stenosis before coronary artery bypass surgery. Is it always necessary?,no,pubmed_cosine_top1,8,12832993,FALSE,no,TRUE,340,480,820,3.695,TRUE
+정확도(pubmed_native_top3),52%,,,,,,,,,,,,,
+정확도(pubmed_cosine_top3),60%,,,,,,,,,,,,,
+정확도(pubmed_cosine_top1),60%,,,,,,,,,,,,,

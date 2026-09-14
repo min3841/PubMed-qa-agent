@@ -1,0 +1,3 @@
+﻿prompt,requested_runs,completed_runs,yes_count,no_count,maybe_count,correct_count,accuracy
+comparison_rule,3,3,0,3,0,3,1.0
+agent_full,3,3,2,1,0,1,0.3333333333333333

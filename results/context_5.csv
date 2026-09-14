@@ -1,0 +1,7 @@
+﻿index,pubid,question,gold_label,prediction,is_valid,is_correct,input_tokens,output_tokens,total_tokens,latency_sec
+1,21645374,Do mitochondria play a role in remodelling lace plant leaves during programmed cell death?,yes,yes,True,True,432,221,653,5.126
+2,16418930,Landolt C and snellen e acuity: differences in strabismus amblyopia?,no,yes,True,False,407,573,980,7.431
+3,9488747,"Syncope during bathing in infants, a pediatric form of water-induced urticaria?",yes,yes,True,True,292,337,629,5.26
+4,17208539,Are the long-term results of the transanal pull-through equal to those of the transabdominal pull-through?,no,yes,True,False,386,302,688,4.868
+5,10808977,Can tailored interventions increase mammography use among HMO women?,yes,yes,True,True,323,1062,1385,14.914
+정확도,60%,,,,,,,,,

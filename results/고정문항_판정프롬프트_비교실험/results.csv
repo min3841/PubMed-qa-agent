@@ -1,0 +1,9 @@
+﻿run,prompt,question,gold_label,prediction,is_valid,is_correct,status,latency_sec,input_tokens,output_tokens,total_tokens,error
+1,comparison_rule,Landolt C and snellen e acuity: differences in strabismus amblyopia?,no,no,TRUE,TRUE,completed,5.948,1377,762,2139,
+1,agent_full,Landolt C and snellen e acuity: differences in strabismus amblyopia?,no,yes,TRUE,FALSE,completed,6.613,1872,911,2783,
+2,comparison_rule,Landolt C and snellen e acuity: differences in strabismus amblyopia?,no,no,TRUE,TRUE,completed,4.909,1377,692,2069,
+2,agent_full,Landolt C and snellen e acuity: differences in strabismus amblyopia?,no,yes,TRUE,FALSE,completed,5.18,1872,703,2575,
+3,comparison_rule,Landolt C and snellen e acuity: differences in strabismus amblyopia?,no,no,TRUE,TRUE,completed,5.62,1377,738,2115,
+3,agent_full,Landolt C and snellen e acuity: differences in strabismus amblyopia?,no,no,TRUE,TRUE,completed,8.173,1872,1277,3149,
+정확도(comparison_rule),100%,,,,,,,,,,,
+정확도(agent_full),33.3%,,,,,,,,,,,
