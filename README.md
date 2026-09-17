@@ -12,16 +12,15 @@ PubMedQA 연구 질문에 대해 `yes`, `no`, `maybe`를 선택하는 학습용 
 | `run_context.py` | 질문에 연결된 PubMedQA context를 직접 제공하는 평가 |
 | `PM_RAG.py` | PubMed 검색, 초록 수집, 후보 논문의 유사도 재정렬 |
 | `run_vector_rag.py` | PubMedQA context의 임베딩 기반 검색 및 평가 |
-| `run_agent.py` | 에이전트 평가 실행 및 문항별 오류 처리 |
 | `agent_config.py` | 모델 설정, 검색·최종 판정 지침, 도구 정의 |
-| `agent_search.py` | 문서 임베딩 준비, 도구 선택 및 추가 검색 |
-| `agent_judge.py` | 검색 대화와 분리된 최종 답변 생성 |
-| `agent_results.py` | 실행 설정·검색 기록·CSV 저장 및 결과 요약 |
+| `agent_search.py` | 문서 임베딩 준비, 도구 선택 및 검색 실행 |
+| `run_agent.py` | CrossEncoder 리랭크, 최종 판정, 결과 저장과 전체 실행 |
 | `compare_pubmed_rerank.py` | PubMed 기본 순위와 유사도 재정렬 비교 |
 | `test.py` | 2번 질문과 문서 3개를 고정한 판정 프롬프트 비교 |
 
 답변 모델은 `gpt-5-nano`, 임베딩 모델은
-`NeuML/pubmedbert-base-embeddings`를 사용했습니다.
+`NeuML/pubmedbert-base-embeddings`, 리랭커는
+`cross-encoder/ms-marco-MiniLM-L6-v2`를 사용했습니다.
 
 ## 에이전트 동작
 
@@ -29,11 +28,12 @@ PubMedQA 연구 질문에 대해 `yes`, `no`, `maybe`를 선택하는 학습용 
 2. Python이 요청받은 검색 함수를 실행합니다.
 3. 벡터 검색은 결과가 있으면 검색을 종료합니다. 결과가 없을 때만 PubMed로 추가 검색합니다.
 4. PubMed를 먼저 사용한 경우에는 LLM이 검색 종료 또는 벡터 추가 검색을 결정합니다.
-5. 수집된 근거를 별도의 최종 판정 호출에 전달해 라벨 하나를 생성합니다.
+5. 수집된 논문을 CrossEncoder로 재정렬하고 상위 논문 1개를 선택합니다.
+6. 선택한 논문만 별도의 최종 판정 호출에 전달해 라벨 하나를 생성합니다.
 
-검색은 문항당 최대 2회입니다. PubMed 검색은 후보를 최대 10개 가져와
-질문과의 코사인 유사도로 재정렬한 뒤 최대 3개를 제공합니다.
-벡터 검색은 PubMedQA context 1,000개에서 상위 3개를 선택합니다.
+검색은 문항당 최대 2회입니다. PubMed 검색은 키워드 검색 결과를 최대 10개 가져오고,
+벡터 검색은 PubMedQA context 1,000개에서 임베딩 유사도 상위 10개를 가져옵니다.
+두 검색 모두 수집한 후보를 CrossEncoder로 재정렬한 뒤 최종 1개를 선택합니다.
 
 ## 설치 및 실행
 
@@ -74,7 +74,7 @@ OpenAI·PubMed 요청 오류는 기록한 뒤 다음 문항을 평가합니다.
 저장소에는 구현 포스팅과 최종 비교에 사용한 대표 결과만 포함했습니다.
 중간 확인용 실행과 중복 결과는 로컬에만 보존했습니다.
 
-실행별 `results/agent_날짜_시간/` 폴더에 다음 파일을 저장합니다.
+실행별 `results/에이전트_리랭커상위1개_문항수_날짜_시간/` 폴더에 다음 파일을 저장합니다.
 
 - `results.csv`: 문항별 답변, 정답 여부, 검색 기록, 오류 정보
 - `trace.jsonl`: 실행 설정, 프롬프트, 검색된 문서와 최종 답변

@@ -26,7 +26,7 @@ def parser()-> argparse.Namespace:
     )
     return parser.parse_args()
 
-def run(query, embedding_model, embeddings, pmids, documents, top_k=3):
+def run(query, embedding_model, embeddings, pmids, documents, top_k=10):
 
     query_embedding = embedding_model.encode(
     [query],
@@ -36,10 +36,11 @@ def run(query, embedding_model, embeddings, pmids, documents, top_k=3):
     hits = semantic_search(
         query_embedding,   # 질문을 숫자로 변환한 벡터
         embeddings,        # 모든 문서의 벡터
-        top_k=top_k,           # 유사도가 높은 문서 3개 선택
+        top_k=top_k,           # 유사도가 높은 문서를 설정한 개수만큼 선택
     )[0]
 
-    retrieved_Context  = []
+    retrieved_context = []
+    retrieved_documents = []
     retrieved_pmids = []
 
     for hit in hits:
@@ -53,17 +54,24 @@ def run(query, embedding_model, embeddings, pmids, documents, top_k=3):
         retrieved_pmids.append(retrieved_pmid)
 
         # LLM에 전달할 문서 목록에 추가
-        retrieved_Context.append(
+        chunk = (
             f"PMID : {retrieved_pmid}\n"
             f"Similarity : {score:.4f}\n"
             f"Context : {retrieved_document}"
         )
+        retrieved_context.append(chunk)
+        retrieved_documents.append({
+            "pmid": retrieved_pmid,
+            "chunk": chunk,
+            "score": float(score),
+        })
 
     return {
         "pmids": retrieved_pmids,
-        "context": "\n\n".join(retrieved_Context),
+        "documents": retrieved_documents,
+        "context": "\n\n".join(retrieved_context),
     }
-    
+
 
 def main()-> None:
     arg = parser()
@@ -97,7 +105,7 @@ def main()-> None:
 
         documents.append(context_text)
         pmids.append(str(sample["pubid"]))
-        
+
 
     embeddings = embedding_model.encode(
         documents,                             # 벡터로 변환할 문서 목록
@@ -133,7 +141,7 @@ def main()-> None:
 
         if retrieval_hit:
             retrieval_rank = (
-               retrieved_pmids.index(gold_pmid) + 1 
+               retrieved_pmids.index(gold_pmid) + 1
             )
         else:
             retrieval_rank = None
@@ -226,7 +234,7 @@ def main()-> None:
     mrr = (
         results_df["retrieval_rank"]
         .apply(
-            lambda rank: ( 
+            lambda rank: (
                 0.0
                 if pd.isna(rank)  #값이 없는지 검사
                 else 1.0 / rank

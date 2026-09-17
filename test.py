@@ -1,305 +1,602 @@
-import argparse
-import json
-import os
-import time
-from datetime import datetime
-from pathlib import Path
+"""마지막 에이전트 오답을 고정 검색 문서로 다시 판정하는 비교 실험.
 
-import pandas as pd
-from datasets import load_dataset
-from dotenv import load_dotenv
-from openai import OpenAI, OpenAIError
-from agent_config import AGENT_INSTRUCTIONS
+1. 정답 PMID 문서만 제공
+2. 마지막 실행의 검색 문서 전체를 같은 순서로 제공
+3. 같은 문서를 CrossEncoder로 재정렬하고 상위 1개만 제공
 
-
-MODEL = "gpt-5-nano"
-VALID_LABELS = {"yes", "no", "maybe"}
-
-# 에이전트의 벡터 검색에서 실제로 반환됐던 문서와 순서를 고정한다.
-FIXED_RETRIEVAL_RESULTS = (
-    {"pmid": "16418930", "similarity": 0.6744},
-    {"pmid": "26686513", "similarity": 0.4891},
-    {"pmid": "27757987", "similarity": 0.4453},
-)
-
-
-COMPARISON_INSTRUCTIONS = """
-제공된 근거만 사용하여 생의학 연구 질문에 답하세요.
-
-다음 차이 비교 규칙을 일반적인 판정 규칙보다 먼저 적용하세요.
-
-두 측정값, 집단, 치료법 또는 치료 결과의 차이를 묻는 질문에서는
-단순히 두 수치가 다르다는 이유만으로 yes라고 답하지 마세요.
-
-연구 결과가 차이를 small, slight, minor 또는 negligible로 표현하거나
-두 결과가 similar, comparable 또는 broadly equal하다고 설명하면
-no로 답하세요.
-
-연구 결과가 의미 있는 차이, 통계적으로 유의한 차이 또는
-임상적으로 유의한 차이를 명확하게 보고하면 yes로 답하세요.
-
-수치 차이만 제시되어 있고 그 차이의 의미나 중요성을
-판단할 수 없다면 maybe로 답하세요.
-
-위의 차이 비교 규칙에 해당하지 않는 일반 질문에서는
-연구 결과가 질문의 핵심 주장을 지지하면 yes로 답하고,
-명확하게 부정하거나 반박하면 no로 답하세요.
-
-직접적인 근거가 부족하거나 관련된 결과가 서로 충돌하면
-maybe로 답하세요.
-
-최종 답변에는 소문자 yes, no, maybe 중 하나만 출력하세요.
-설명이나 다른 문장은 출력하지 마세요.
+세 조건 모두 마지막 실행의 최종 판정 모델과 지침을 그대로 사용한다.
+정답 라벨은 채점에만 사용하며 모델 입력에는 포함하지 않는다.
 """
 
+import argparse
+import csv
+import json
+import os
+import re
+import time
+from collections import defaultdict
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
-def load_agent_instructions() -> str:
-    """모델을 로딩하거나 검색을 실행하지 않고 현재 지침을 가져온다."""
-    return AGENT_INSTRUCTIONS
+from dotenv import load_dotenv
+from openai import OpenAI, OpenAIError
+from sentence_transformers import CrossEncoder
+
+from agent_config import FINAL_ANSWER_INSTRUCTIONS, LABEL, MODEL
+
+
+BASE_DIR = Path(__file__).resolve().parent
+DEFAULT_SOURCE_TRACE = (
+    BASE_DIR
+    / "results"
+    / "최종에이전트_100문항_정확도68퍼"
+    / "trace.jsonl"
+)
+RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L6-v2"
+
+CONDITIONS = {
+    "1": {
+        "name": "gold_only",
+        "folder": "1_정답PMID문서만",
+        "description": "정답 PMID 문서 하나만 제공",
+    },
+    "2": {
+        "name": "fixed_all",
+        "folder": "2_기존검색문서전체",
+        "description": "마지막 실행의 검색 문서 전체와 순서를 그대로 제공",
+    },
+    "3": {
+        "name": "reranker_top1",
+        "folder": "3_리랭커상위1개문서",
+        "description": "고정 문서를 CrossEncoder로 재정렬한 뒤 1위 문서만 제공",
+    },
+    "4": {
+        "name": "reranker_top3",
+        "folder": "4_리랭커상위3개문서",
+        "description": "고정 문서를 CrossEncoder로 재정렬한 뒤 상위 3개 문서 제공",
+    },
+}
+
+RESULT_FIELDS = [
+    "index", "pubid", "question", "gold_label", "original_prediction",
+    "original_used_tools", "condition", "condition_description",
+    "original_pmids", "provided_pmids", "gold_pmid_provided",
+    "reranker_ranked_pmids", "reranker_scores", "prediction", "raw_answer",
+    "response_status", "is_valid", "is_correct", "latency_sec",
+    "input_tokens", "output_tokens", "total_tokens", "error_type",
+    "error_message",
+]
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="PubMedQA 2번 문항의 판정 프롬프트 비교",
+        description="정답 PMID가 검색된 에이전트 오답의 3조건 비교 실험",
     )
     parser.add_argument(
-        "--runs",
-        type=int,
-        default=3,
-        help="각 프롬프트의 반복 호출 횟수 (기본값: 3)",
+        "--source-trace", type=Path, default=DEFAULT_SOURCE_TRACE,
+        help="마지막 100문항 실행의 trace.jsonl 경로",
+    )
+    parser.add_argument(
+        "--condition",
+        choices=("1", "2", "3", "4", "reranker", "all"),
+        default="all",
+        help=(
+            "실행 조건. reranker는 리랭커 상위 1개와 3개를 비교하고, "
+            "all은 모든 조건을 차례로 실행"
+        ),
+    )
+    parser.add_argument(
+        "--max-items", type=int, default=None,
+        help="앞에서부터 실행할 최대 문항 수. 생략하면 대상 전체 실행",
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true",
+        help="API를 호출하지 않고 대상 문항과 고정 문서만 점검",
     )
     return parser.parse_args()
 
 
-def main() -> None:
-    args = parse_args()
+def read_trace(path: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    if not path.exists():
+        raise FileNotFoundError(f"원본 trace를 찾지 못했습니다: {path}")
 
-    if not 1 <= args.runs <= 20:
-        raise SystemExit("--runs는 1에서 20 사이여야 합니다.")
+    run_config: dict[str, Any] | None = None
+    answers: list[dict[str, Any]] = []
 
-    load_dotenv()
-
-    if not os.getenv("OPENAI_API_KEY"):
-        raise SystemExit(".env 파일에 OPENAI_API_KEY를 입력하세요.")
-
-    client = OpenAI()
-
-    prompts = {
-        "comparison_rule": COMPARISON_INSTRUCTIONS,
-        "agent_full": load_agent_instructions(),
-    }
-
-    dataset = load_dataset(
-        "qiaojin/PubMedQA",
-        "pqa_labeled",
-        split="train",
-    )
-
-    # PubMedQA의 두 번째 문항만 고정해서 사용한다.
-    sample = dataset[1]
-
-    question = sample["question"]
-
-    fixed_pmids = {
-        item["pmid"]
-        for item in FIXED_RETRIEVAL_RESULTS
-    }
-    documents_by_pmid: dict[str, str] = {}
-
-    # 검색하지 않고 데이터셋에서 지정된 PMID 세 개의 context를 꺼낸다.
-    for dataset_sample in dataset:
-        pmid = str(dataset_sample["pubid"])
-
-        if pmid in fixed_pmids:
-            documents_by_pmid[pmid] = "\n\n".join(
-                dataset_sample["context"]["contexts"]
-            )
-
-        if len(documents_by_pmid) == len(fixed_pmids):
-            break
-
-    missing_pmids = fixed_pmids - documents_by_pmid.keys()
-
-    if missing_pmids:
-        raise RuntimeError(
-            "고정 문서를 찾지 못했습니다: "
-            + ", ".join(sorted(missing_pmids))
-        )
-
-    context_parts = []
-
-    for item in FIXED_RETRIEVAL_RESULTS:
-        pmid = item["pmid"]
-        similarity = item["similarity"]
-
-        context_parts.append(
-            f"PMID : {pmid}\n"
-            f"Similarity : {similarity:.4f}\n"
-            f"Context : {documents_by_pmid[pmid]}"
-        )
-
-    context = "\n\n".join(context_parts)
-
-    # 정답은 평가에만 사용하며 모델 입력에는 포함하지 않는다.
-    gold_label = sample["final_decision"].lower()
-
-    model_input = (
-        f"Question:\n{question}\n\n"
-        f"Evidence:\n{context}"
-    )
-
-    results: list[dict[str, object]] = []
-
-    print(f"질문: {question}")
-    print(f"정답: {gold_label}")
-    print(
-        "고정된 PMID: "
-        f"{[item['pmid'] for item in FIXED_RETRIEVAL_RESULTS]}"
-    )
-    print(f"프롬프트당 반복 횟수: {args.runs}")
-
-    # 두 프롬프트를 같은 질문과 같은 근거로 번갈아 호출한다.
-    for run_number in range(1, args.runs + 1):
-        for prompt_name, instructions in prompts.items():
-            started_at = time.perf_counter()
-
+    with path.open("r", encoding="utf-8") as file:
+        for line_number, line in enumerate(file, start=1):
+            if not line.strip():
+                continue
             try:
-                response = client.responses.create(
-                    model=MODEL,
-                    instructions=instructions,
-                    input=model_input,
-                )
+                record = json.loads(line)
+            except json.JSONDecodeError as error:
+                raise ValueError(
+                    f"trace {line_number}번째 줄의 JSON이 잘못됐습니다."
+                ) from error
 
-                latency_sec = time.perf_counter() - started_at
-                prediction = response.output_text.strip().lower()
-                is_valid = prediction in VALID_LABELS
-                is_correct = is_valid and prediction == gold_label
+            if record.get("event") == "run_config" and run_config is None:
+                run_config = record
+            elif record.get("event") == "answer":
+                answers.append(record)
 
-                row = {
-                    "run": run_number,
-                    "prompt": prompt_name,
-                    "question": question,
-                    "gold_label": gold_label,
+    if run_config is None:
+        raise ValueError("trace에서 run_config를 찾지 못했습니다.")
+    if not answers:
+        raise ValueError("trace에서 answer 기록을 찾지 못했습니다.")
+    return run_config, answers
+
+
+def parse_search_trace(answer: dict[str, Any]) -> list[dict[str, Any]]:
+    value = answer.get("search_trace", [])
+    if isinstance(value, str):
+        value = json.loads(value)
+    if not isinstance(value, list):
+        raise TypeError(
+            f"{answer.get('index')}번 문항의 search_trace가 리스트가 아닙니다."
+        )
+    return value
+
+
+def split_context_documents(
+    context: str,
+    search_record: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """벡터 및 PubMed 검색의 결합 문자열을 PMID별 원문 조각으로 나눈다."""
+    starts = list(re.finditer(r"(?m)^PMID\s*:\s*(\d+)\s*$", context))
+    documents: list[dict[str, Any]] = []
+
+    for position, match in enumerate(starts):
+        end = starts[position + 1].start() if position + 1 < len(starts) else len(context)
+        chunk = context[match.start():end].strip()
+        score_match = re.search(
+            r"(?m)^Similarity\s*:\s*([^\n]+)$", chunk,
+        )
+        documents.append(
+            {
+                "pmid": match.group(1),
+                "chunk": chunk,
+                "reranker_text": chunk,
+                "original_similarity": (
+                    score_match.group(1).strip() if score_match else ""
+                ),
+                "search_index": search_record.get("search_index"),
+                "tool": search_record.get("tool", ""),
+                "query": search_record.get("query", ""),
+            }
+        )
+
+    expected_pmids = [str(pmid) for pmid in search_record.get("pmids", [])]
+    parsed_pmids = [document["pmid"] for document in documents]
+    if expected_pmids and parsed_pmids != expected_pmids:
+        raise ValueError(
+            "검색 문서 분리 결과와 저장된 PMID 순서가 다릅니다. "
+            f"expected={expected_pmids}, parsed={parsed_pmids}"
+        )
+    return documents
+
+
+def collect_documents(
+    search_trace: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    documents: list[dict[str, Any]] = []
+    seen_pmids: set[str] = set()
+
+    for search_record in search_trace:
+        parsed = split_context_documents(
+            search_record.get("context", ""), search_record,
+        )
+        for document in parsed:
+            if document["pmid"] in seen_pmids:
+                continue
+            seen_pmids.add(document["pmid"])
+            documents.append(document)
+    return documents
+
+
+def select_experiment_items(
+    answers: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    selected: list[dict[str, Any]] = []
+
+    for answer in answers:
+        if answer.get("is_correct") is not False:
+            continue
+        search_trace = parse_search_trace(answer)
+        documents = collect_documents(search_trace)
+        gold_pmid = str(answer["pubid"])
+        if gold_pmid not in {document["pmid"] for document in documents}:
+            continue
+        selected.append(
+            {"answer": answer, "search_trace": search_trace, "documents": documents}
+        )
+    return selected
+
+
+def format_search_evidence(documents: list[dict[str, Any]]) -> str:
+    """선택 문서를 원래 에이전트가 사용한 검색 근거 형식으로 만든다."""
+    grouped: dict[tuple[Any, str, str], list[dict[str, Any]]] = defaultdict(list)
+    group_order: list[tuple[Any, str, str]] = []
+
+    for document in documents:
+        key = (
+            document.get("search_index"),
+            document.get("tool", ""),
+            document.get("query", ""),
+        )
+        if key not in grouped:
+            group_order.append(key)
+        grouped[key].append(document)
+
+    evidence_parts: list[str] = []
+    for search_index, tool, query in group_order:
+        group = grouped[(search_index, tool, query)]
+        pmids = [document["pmid"] for document in group]
+        context = "\n\n".join(document["chunk"] for document in group)
+        evidence_parts.append(
+            f"Search {search_index}\n"
+            f"Tool: {tool}\n"
+            f"Retrieved PMIDs: {pmids}\n"
+            f"Evidence:\n{context}"
+        )
+    return "\n\n".join(evidence_parts)
+
+
+def format_original_evidence(search_trace: list[dict[str, Any]]) -> str:
+    """마지막 실행 당시 최종 판정 LLM이 받은 근거를 그대로 재구성한다."""
+    evidence_parts = []
+    for record in search_trace:
+        evidence_parts.append(
+            f"Search {record['search_index']}\n"
+            f"Tool: {record['tool']}\n"
+            f"Retrieved PMIDs: {record['pmids']}\n"
+            f"Evidence:\n{record['context']}"
+        )
+    return "\n\n".join(evidence_parts)
+
+
+def choose_evidence(
+    condition: str,
+    item: dict[str, Any],
+    reranker: CrossEncoder | None,
+) -> tuple[str, list[str], list[str], list[float]]:
+    answer = item["answer"]
+    documents = item["documents"]
+    gold_pmid = str(answer["pubid"])
+
+    if condition == "1":
+        selected = [
+            document for document in documents if document["pmid"] == gold_pmid
+        ][:1]
+        return (
+            format_search_evidence(selected),
+            [document["pmid"] for document in selected], [], [],
+        )
+
+    if condition == "2":
+        return (
+            format_original_evidence(item["search_trace"]),
+            [document["pmid"] for document in documents], [], [],
+        )
+
+    if reranker is None:
+        raise RuntimeError("3번 조건에는 리랭커가 필요합니다.")
+
+    pairs = [
+        (answer["question"], document["reranker_text"])
+        for document in documents
+    ]
+    scores = [float(score) for score in reranker.predict(pairs)]
+    ranked = sorted(
+        zip(documents, scores), key=lambda pair: pair[1], reverse=True,
+    )
+    top_k = 1 if condition == "3" else 3
+    selected_documents = [document for document, _score in ranked[:top_k]]
+    return (
+        format_search_evidence(selected_documents),
+        [document["pmid"] for document in selected_documents],
+        [document["pmid"] for document, _score in ranked],
+        [round(score, 6) for _document, score in ranked],
+    )
+
+
+def save_rows(path: Path, rows: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8-sig") as file:
+        writer = csv.DictWriter(file, fieldnames=RESULT_FIELDS)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def append_jsonl(path: Path, record: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as file:
+        file.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def result_row_base(
+    item: dict[str, Any],
+    condition: str,
+    provided_pmids: list[str],
+    ranked_pmids: list[str],
+    reranker_scores: list[float],
+) -> dict[str, Any]:
+    answer = item["answer"]
+    original_pmids = [document["pmid"] for document in item["documents"]]
+    return {
+        "index": answer["index"],
+        "pubid": str(answer["pubid"]),
+        "question": answer["question"],
+        "gold_label": answer["gold_label"],
+        "original_prediction": answer.get("prediction", ""),
+        "original_used_tools": answer.get("used_tools", ""),
+        "condition": CONDITIONS[condition]["name"],
+        "condition_description": CONDITIONS[condition]["description"],
+        "original_pmids": json.dumps(original_pmids, ensure_ascii=False),
+        "provided_pmids": json.dumps(provided_pmids, ensure_ascii=False),
+        "gold_pmid_provided": str(answer["pubid"]) in provided_pmids,
+        "reranker_ranked_pmids": json.dumps(ranked_pmids, ensure_ascii=False),
+        "reranker_scores": json.dumps(reranker_scores, ensure_ascii=False),
+    }
+
+
+def execute_condition(
+    condition: str,
+    items: list[dict[str, Any]],
+    client: OpenAI,
+    model: str,
+    instructions: str,
+    run_dir: Path,
+    reranker: CrossEncoder | None,
+) -> list[dict[str, Any]]:
+    condition_dir = run_dir / CONDITIONS[condition]["folder"]
+    result_path = condition_dir / "results.csv"
+    evidence_path = condition_dir / "evidence.jsonl"
+    rows: list[dict[str, Any]] = []
+
+    print("\n" + "=" * 72)
+    print(f"조건 {condition}: {CONDITIONS[condition]['description']}")
+
+    for order, item in enumerate(items, start=1):
+        answer = item["answer"]
+        evidence, provided_pmids, ranked_pmids, scores = choose_evidence(
+            condition, item, reranker,
+        )
+        row = result_row_base(
+            item, condition, provided_pmids, ranked_pmids, scores,
+        )
+
+        # API 오류가 나도 어떤 고정 근거가 사용됐는지 먼저 남긴다.
+        append_jsonl(
+            evidence_path,
+            {
+                "index": answer["index"],
+                "pubid": str(answer["pubid"]),
+                "condition": CONDITIONS[condition]["name"],
+                "provided_pmids": provided_pmids,
+                "reranker_ranked_pmids": ranked_pmids,
+                "reranker_scores": scores,
+                "evidence": evidence,
+            },
+        )
+
+        started_at = time.perf_counter()
+        try:
+            response = client.responses.create(
+                model=model,
+                instructions=instructions,
+                input=(
+                    f"Question:\n{answer['question']}\n\n"
+                    f"Evidence:\n{evidence}"
+                ),
+            )
+            latency_sec = time.perf_counter() - started_at
+            prediction = response.output_text.strip().lower()
+            status = response.status
+            is_valid = status == "completed" and prediction in LABEL
+            row.update(
+                {
                     "prediction": prediction,
+                    "raw_answer": response.output_text,
+                    "response_status": status,
                     "is_valid": is_valid,
-                    "is_correct": is_correct,
-                    "status": "completed",
+                    "is_correct": is_valid and prediction == answer["gold_label"],
                     "latency_sec": round(latency_sec, 3),
                     "input_tokens": response.usage.input_tokens,
                     "output_tokens": response.usage.output_tokens,
                     "total_tokens": response.usage.total_tokens,
-                    "error": "",
+                    "error_type": "", "error_message": "",
                 }
-
-            except OpenAIError as error:
-                latency_sec = time.perf_counter() - started_at
-
-                row = {
-                    "run": run_number,
-                    "prompt": prompt_name,
-                    "question": question,
-                    "gold_label": gold_label,
-                    "prediction": "",
-                    "is_valid": False,
-                    "is_correct": False,
-                    "status": "api_error",
-                    "latency_sec": round(latency_sec, 3),
-                    "input_tokens": 0,
-                    "output_tokens": 0,
-                    "total_tokens": 0,
-                    "error": str(error),
+            )
+        except OpenAIError as error:
+            latency_sec = time.perf_counter() - started_at
+            row.update(
+                {
+                    "prediction": "", "raw_answer": "",
+                    "response_status": "api_error", "is_valid": False,
+                    "is_correct": False, "latency_sec": round(latency_sec, 3),
+                    "input_tokens": 0, "output_tokens": 0, "total_tokens": 0,
+                    "error_type": type(error).__name__,
+                    "error_message": str(error),
                 }
-
-            results.append(row)
-
-            print(
-                f"실행 {run_number} | {prompt_name} | "
-                f"답변: {row['prediction'] or 'API 오류'} | "
-                f"정답 여부: {row['is_correct']}"
             )
 
-    results_df = pd.DataFrame(results)
+        rows.append(row)
+        save_rows(result_path, rows)
+        print(
+            f"[{order}/{len(items)}] {answer['index']}번 | "
+            f"제공 PMID {provided_pmids} | 정답 {answer['gold_label']} | "
+            f"예측 {row['prediction'] or 'API 오류'} | 정답 여부 {row['is_correct']}"
+        )
+    return rows
 
-    summary_rows: list[dict[str, object]] = []
 
-    for prompt_name in prompts:
-        prompt_df = results_df[
-            results_df["prompt"] == prompt_name
-        ]
-        completed_df = prompt_df[
-            prompt_df["status"] == "completed"
-        ]
-
-        summary_rows.append(
+def build_summary(
+    condition_rows: dict[str, list[dict[str, Any]]],
+) -> list[dict[str, Any]]:
+    summary: list[dict[str, Any]] = []
+    for condition, rows in condition_rows.items():
+        completed = [row for row in rows if row["response_status"] == "completed"]
+        valid = [row for row in completed if row["is_valid"]]
+        correct = [row for row in valid if row["is_correct"]]
+        gold_top1 = [row for row in rows if row["gold_pmid_provided"]]
+        summary.append(
             {
-                "prompt": prompt_name,
-                "requested_runs": args.runs,
-                "completed_runs": len(completed_df),
-                "yes_count": int(
-                    (completed_df["prediction"] == "yes").sum()
+                "condition": CONDITIONS[condition]["name"],
+                "description": CONDITIONS[condition]["description"],
+                "target_count": len(rows),
+                "completed_count": len(completed),
+                "valid_count": len(valid),
+                "correct_count": len(correct),
+                "accuracy": round(len(correct) / len(valid), 4) if valid else None,
+                "gold_pmid_provided_count": len(gold_top1),
+                "gold_pmid_provided_rate": (
+                    round(len(gold_top1) / len(rows), 4) if rows else None
                 ),
-                "no_count": int(
-                    (completed_df["prediction"] == "no").sum()
-                ),
-                "maybe_count": int(
-                    (completed_df["prediction"] == "maybe").sum()
-                ),
-                "correct_count": int(
-                    completed_df["is_correct"].sum()
-                ),
-                "accuracy": (
-                    completed_df["is_correct"].mean()
-                    if len(completed_df) > 0
-                    else None
-                ),
+                "api_error_count": len(rows) - len(completed),
+                "format_error_count": len(completed) - len(valid),
             }
         )
+    return summary
 
-    summary_df = pd.DataFrame(summary_rows)
 
-    run_dir = (
-        Path("results")
-        / datetime.now().strftime("prompt_test_q2_%Y%m%d_%H%M%S_%f")
+def write_summary(path: Path, rows: list[dict[str, Any]]) -> None:
+    if not rows:
+        return
+    with path.open("w", newline="", encoding="utf-8-sig") as file:
+        writer = csv.DictWriter(file, fieldnames=list(rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def main() -> None:
+    args = parse_args()
+    if args.max_items is not None and args.max_items < 1:
+        raise SystemExit("--max-items는 1 이상이어야 합니다.")
+
+    source_trace = args.source_trace.expanduser().resolve()
+    run_config, answers = read_trace(source_trace)
+    items = select_experiment_items(answers)
+    if args.max_items is not None:
+        items = items[:args.max_items]
+    if not items:
+        raise SystemExit(
+            "틀렸고 정답 PMID가 검색 결과에 포함된 문항을 찾지 못했습니다."
+        )
+
+    source_model = str(run_config.get("model") or MODEL)
+    source_instructions = str(
+        run_config.get("final_answer_instructions") or FINAL_ANSWER_INSTRUCTIONS
     )
+    if args.condition == "all":
+        selected_conditions = ["1", "2", "3", "4"]
+    elif args.condition == "reranker":
+        selected_conditions = ["3", "4"]
+    else:
+        selected_conditions = [args.condition]
+
+    print(f"원본 trace: {source_trace}")
+    print(f"원본 오답 수: {sum(a.get('is_correct') is False for a in answers)}")
+    print(f"정답 PMID가 포함된 오답 수: {len(items)}")
+    print(f"실행 조건: {selected_conditions}")
+    print(f"판정 모델: {source_model}")
+    print(
+        "현재 agent_config.py와 원본 실행 지침 일치: "
+        f"{source_instructions == FINAL_ANSWER_INSTRUCTIONS}"
+    )
+
+    if args.dry_run:
+        for item in items:
+            answer = item["answer"]
+            pmids = [document["pmid"] for document in item["documents"]]
+            print(
+                f"{answer['index']}번 | 정답 {answer['gold_label']} | "
+                f"기존 예측 {answer['prediction']} | 고정 PMID {pmids}"
+            )
+        return
+
+    load_dotenv(BASE_DIR / ".env")
+    if not os.getenv("OPENAI_API_KEY"):
+        raise SystemExit(".env 파일에 OPENAI_API_KEY를 입력하세요.")
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    experiment_name = (
+        "오답(정답PMID제공)결과_리랭커상위1개3개비교"
+        if selected_conditions == ["3", "4"]
+        else "오답(정답PMID제공)결과_전체조건비교"
+    )
+    run_dir = BASE_DIR / "results" / f"{experiment_name}_{timestamp}"
     run_dir.mkdir(parents=True, exist_ok=False)
 
-    results_path = run_dir / "results.csv"
-    summary_path = run_dir / "summary.csv"
-    config_path = run_dir / "config.json"
-
-    results_df.to_csv(
-        results_path,
-        index=False,
-        encoding="utf-8-sig",
-    )
-    summary_df.to_csv(
-        summary_path,
-        index=False,
-        encoding="utf-8-sig",
-    )
-
-    with config_path.open("w", encoding="utf-8") as file:
+    with (run_dir / "config.json").open("w", encoding="utf-8") as file:
         json.dump(
             {
-                "model": MODEL,
-                "dataset_index": 1,
-                "question_number": 2,
-                "question": question,
-                "evidence_mode": "fixed_vector_top3",
-                "fixed_retrieval_results": FIXED_RETRIEVAL_RESULTS,
-                "runs_per_prompt": args.runs,
-                "prompts": prompts,
+                "source_trace": str(source_trace),
+                "source_model": source_model,
+                "source_final_answer_instructions": source_instructions,
+                "current_instructions_match_source": (
+                    source_instructions == FINAL_ANSWER_INSTRUCTIONS
+                ),
+                "selected_conditions": selected_conditions,
+                "selected_question_indices": [
+                    item["answer"]["index"] for item in items
+                ],
+                "selection_rule": (
+                    "원본 실행 오답 중 정답 PMID가 검색 결과에 포함된 문항"
+                ),
+                "reranker_model": (
+                    RERANKER_MODEL
+                    if any(condition in selected_conditions for condition in ("3", "4"))
+                    else None
+                ),
+                "reranker_top_k": (
+                    [1, 3]
+                    if selected_conditions == ["3", "4"]
+                    else [
+                        1 if condition == "3" else 3
+                        for condition in selected_conditions
+                        if condition in ("3", "4")
+                    ]
+                ),
             },
             file,
             ensure_ascii=False,
             indent=2,
         )
 
-    print("\n" + "=" * 60)
-    print(summary_df.to_string(index=False))
-    print(f"상세 결과: {results_path}")
-    print(f"요약 결과: {summary_path}")
-    print(f"실험 설정: {config_path}")
+    client = OpenAI()
+    reranker = None
+    if any(condition in selected_conditions for condition in ("3", "4")):
+        print(f"리랭커 로딩: {RERANKER_MODEL}")
+        reranker = CrossEncoder(RERANKER_MODEL, max_length=512)
+
+    condition_rows: dict[str, list[dict[str, Any]]] = {}
+    for condition in selected_conditions:
+        condition_rows[condition] = execute_condition(
+            condition=condition,
+            items=items,
+            client=client,
+            model=source_model,
+            instructions=source_instructions,
+            run_dir=run_dir,
+            reranker=reranker,
+        )
+
+    summary = build_summary(condition_rows)
+    write_summary(run_dir / "summary.csv", summary)
+
+    print("\n" + "=" * 72)
+    for row in summary:
+        accuracy = (
+            f"{row['accuracy'] * 100:.1f}%"
+            if row["accuracy"] is not None else "계산 불가"
+        )
+        print(
+            f"{row['condition']}: {row['correct_count']}/"
+            f"{row['valid_count']} ({accuracy}), 정답 PMID 제공 "
+            f"{row['gold_pmid_provided_count']}/{row['target_count']}"
+        )
+    print(f"결과 폴더: {run_dir}")
 
 
 if __name__ == "__main__":

@@ -163,16 +163,49 @@ def build_pubmed_context(pmids: list[str]) -> str:
 
     return "\n\n".join(context_parts)
 
-def run(query: str, top_k: int = 3) -> dict:
-    pmids = search_pubmed(
+def run(query: str, top_k: int = 10) -> dict:
+    candidate_pmids = list(dict.fromkeys(search_pubmed(
         query=query,
         top_k=top_k,
-    )
-    context = build_pubmed_context(pmids)
+    )))
+    fetched_documents = fetch_pubmed_documents(candidate_pmids)
+    documents_by_pmid = {
+        document["pmid"]: document
+        for document in fetched_documents
+    }
+
+    pmids = []
+    documents = []
+    context_parts = []
+
+    # PubMed 검색 순서를 유지한 채 제목과 초록을 CrossEncoder 후보로 만든다.
+    for pmid in candidate_pmids:
+        document = documents_by_pmid.get(pmid)
+        if document is None:
+            continue
+
+        abstract = document["abstract"] or "No abstract available."
+        chunk = (
+            f"PMID: {document['pmid']}\n"
+            f"Title: {document['title']}\n"
+            f"Abstract: {abstract}"
+        )
+        pmids.append(document["pmid"])
+        documents.append({
+            "pmid": document["pmid"],
+            "chunk": chunk,
+        })
+        context_parts.append(chunk)
 
     return {
         "pmids": pmids,
-        "context": context,
+        "documents": documents,
+        "context": (
+            "\n\n".join(context_parts)
+            if context_parts
+            else "No PubMed evidence was retrieved."
+        ),
+        "candidate_pmids": candidate_pmids,
     }
 
 
@@ -211,6 +244,7 @@ def run_reranked(
 
     result = {
         "pmids": [],
+        "documents": [],
         "context": "No PubMed evidence was retrieved.",
         "candidate_pmids": candidate_pmids,
         "ranked_candidates": [],
@@ -249,12 +283,18 @@ def run_reranked(
             result["pmids"].append(document["pmid"])
             result["similarity_scores"].append(score)
             abstract = document["abstract"] or "No abstract available."
-            context_parts.append(
+            chunk = (
                 f"PMID: {document['pmid']}\n"
                 f"Similarity: {score:.4f}\n"
                 f"Title: {document['title']}\n"
                 f"Abstract: {abstract}"
             )
+            context_parts.append(chunk)
+            result["documents"].append({
+                "pmid": document["pmid"],
+                "chunk": chunk,
+                "score": score,
+            })
 
     result["context"] = "\n\n".join(context_parts)
     result["ranked_candidates"] = ranked_candidates
@@ -300,7 +340,7 @@ def main() -> None:
         question = sample["question"]
         gold_label = sample["final_decision"].lower()
 
-        run_dict = run(query=question, top_k=3)
+        run_dict = run(query=question, top_k=10)
 
         pmids = run_dict["pmids"]
         context = run_dict["context"]

@@ -2,12 +2,17 @@
 import json
 from pathlib import Path
 
-from PM_RAG import run_reranked as pubmed_search
+from PM_RAG import run as pubmed_search
 from run_vector_rag import run as vector_search
 from agent_config import (
     MODEL, PUBMED_CANDIDATE_K, RETRIEVAL_TOP_K, SEARCH_INSTRUCTIONS, TOOLS,
 )
-from agent_results import append_log
+
+
+def append_log(path: Path, record: dict) -> None:
+    """실행 과정을 JSONL 한 줄로 즉시 저장한다."""
+    with path.open("a", encoding="utf-8") as file:
+        file.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
 def prepare_search_resources(datasets, embedding_model) -> dict:
@@ -61,13 +66,13 @@ def run_search_agent(
         instructions=SEARCH_INSTRUCTIONS,
         tools=tools,
         input=question,
-        tool_choice="required",
-        parallel_tool_calls=False,
+        tool_choice="required",    # 반드시 도구를 호출
+        parallel_tool_calls=False, # 한 응답에서 여러 도구를 동시에 호출하지 않음
     )
 
     # 첫 검색이 부족한 경우에만 다른 도구로 한 번 더 검색한다.
     for search_index in range(2):
-        if search_response.status != "completed":
+        if search_response.status != "completed": #OpenAI의 응답 생성 상태, completed: 응답 생성 완료
             raise RuntimeError(
                 "검색 담당 LLM 응답이 완료되지 않았습니다: "
                 f"{search_response.id} "
@@ -77,7 +82,7 @@ def run_search_agent(
         tool_calls = [
             item
             for item in search_response.output
-            if item.type == "function_call"
+            if item.type == "function_call"  # 도구 호출 요청인 경우만
         ]
 
         # 도구 요청 없이 finish가 오면 현재 근거로 검색을 끝낸다.
@@ -110,7 +115,7 @@ def run_search_agent(
         arguments = json.loads(item.arguments)
 
         if (
-            not isinstance(arguments, dict)
+            not isinstance(arguments, dict) #isinstance() 어떤 값이 특정 자료형인지 확인
             or not isinstance(arguments.get("query"), str)
             or not arguments["query"].strip()
         ):
@@ -137,10 +142,7 @@ def run_search_agent(
         elif item.name == "pubmed_search":
             result = pubmed_search(
                 query=arguments["query"],
-                question=question,
-                embedding_model=embedding_model,
-                candidate_k=PUBMED_CANDIDATE_K,
-                top_k=RETRIEVAL_TOP_K,
+                top_k=PUBMED_CANDIDATE_K,
             )
 
         else:
@@ -157,18 +159,13 @@ def run_search_agent(
             "response_id": search_response.id,
             "call_id": item.call_id,
             "pmids": result["pmids"],
+            "documents": result["documents"],  # 문서별로 구분된 검색 결과
             "context": result["context"],
         }
 
         if item.name == "pubmed_search":
             search_record["candidate_pmids"] = (
                 result["candidate_pmids"]
-            )
-            search_record["ranked_candidates"] = (
-                result["ranked_candidates"]
-            )
-            search_record["similarity_scores"] = (
-                result["similarity_scores"]
             )
 
         # 첫 번째와 두 번째 검색 결과를 모두 최종 판정용으로 보존한다.
@@ -197,15 +194,6 @@ def run_search_agent(
                 "PubMed 후보 PMID: "
                 f"{result['candidate_pmids']}"
             )
-
-            for selected_pmid, score in zip(
-                result["pmids"],
-                result["similarity_scores"],
-            ):
-                print(
-                    f"선택 논문: {selected_pmid}, "
-                    f"코사인 유사도: {score:.4f}"
-                )
 
         # 벡터 검색은 결과가 하나라도 있으면 그 근거를 그대로 사용한다.
         # 결과가 비어 있을 때만 아래 단계에서 PubMed 추가 검색을 허용한다.
@@ -243,12 +231,12 @@ def run_search_agent(
         # 2차 호출: 첫 검색 결과를 보고 finish 또는 다른 도구를 선택한다.
         search_response = client.responses.create(
             model=MODEL,
-            previous_response_id=search_response.id,
+            previous_response_id=search_response.id, #이전 LLM 응답과 현재 요청을 연결하는 값
             instructions=SEARCH_INSTRUCTIONS,
             input=[
-                {
-                    "type": "function_call_output",
-                    "call_id": item.call_id,
+                {    #이전 LLM 호출 결과 항목(type, name, arguments, call_id)
+                    "type": "function_call_output",  #함수 호출에 대한 실행 결과함수 호출에 대한 실행 결과
+                    "call_id": item.call_id,         #어떤 도구 요청에 대한 결과인지 연결
                     "output": json.dumps(
                         tool_output,
                         ensure_ascii=False,
