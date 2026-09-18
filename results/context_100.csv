@@ -1,0 +1,102 @@
+﻿index,pubid,question,gold_label,prediction,is_valid,is_correct,input_tokens,output_tokens,total_tokens,latency_sec
+1,21645374,Do mitochondria play a role in remodelling lace plant leaves during programmed cell death?,yes,yes,TRUE,TRUE,432,300,732,3.471
+2,16418930,Landolt C and snellen e acuity: differences in strabismus amblyopia?,no,yes,TRUE,FALSE,407,528,935,4.517
+3,9488747,"Syncope during bathing in infants, a pediatric form of water-induced urticaria?",yes,yes,TRUE,TRUE,292,459,751,4.035
+4,17208539,Are the long-term results of the transanal pull-through equal to those of the transabdominal pull-through?,no,yes,TRUE,FALSE,386,316,702,3.027
+5,10808977,Can tailored interventions increase mammography use among HMO women?,yes,yes,TRUE,TRUE,323,381,704,4.323
+6,23831910,Double balloon enteroscopy: is it efficacious and safe in a community setting?,yes,maybe,TRUE,FALSE,351,430,781,2.923
+7,26037986,30-Day and 1-year mortality in emergency general surgery laparotomies: an area of concern and need for improvement?,maybe,yes,TRUE,FALSE,302,306,608,1.898
+8,26852225,Is adjustment for reporting heterogeneity necessary in sleep disorders?,no,yes,TRUE,FALSE,359,278,637,2.184
+9,17113061,Do mutations causing low HDL-C promote increased carotid intima-media thickness?,no,no,TRUE,TRUE,263,201,464,1.761
+10,10966337,A short stay or 23-hour ward in a general and academic children's hospital: are they effective?,yes,yes,TRUE,TRUE,544,214,758,2.167
+11,25432938,Did Chile's traffic law reform push police enforcement?,yes,yes,TRUE,TRUE,320,227,547,2.66
+12,18847643,Therapeutic anticoagulation in the trauma patient: is it safe?,no,no,TRUE,TRUE,404,217,621,2.721
+13,18239988,Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?,yes,yes,TRUE,TRUE,398,258,656,2.848
+14,25957366,Prompting Primary Care Providers about Increased Patient Risk As a Result of Family History: Does It Work?,no,no,TRUE,TRUE,356,274,630,2.066
+15,24866606,Do emergency ultrasound fellowship programs impact emergency medicine residents' ultrasound education?,yes,yes,TRUE,TRUE,335,616,951,3.84
+16,26578404,Patient-Controlled Therapy of Breathlessness in Palliative Care: A New Therapeutic Concept for Opioid Administration?,yes,yes,TRUE,TRUE,512,342,854,2.612
+17,11729377,Is there still a need for living-related liver transplantation in children?,yes,maybe,TRUE,FALSE,394,343,737,3.174
+18,17096624,Do patterns of knowledge and attitudes exist among unvaccinated seniors?,yes,yes,TRUE,TRUE,203,219,422,1.688
+19,22694248,Is there a model to teach and practice retroperitoneoscopic nephrectomy?,yes,yes,TRUE,TRUE,342,176,518,2.541
+20,22990761,Cardiovascular risk in a rural adult West African population: is resting heart rate also relevant?,yes,yes,TRUE,TRUE,396,242,638,1.869
+21,19394934,Israeli hospital preparedness for terrorism-related multiple casualty incidents: can the surge capacity and injury severity distribution be better predicted?,yes,maybe,TRUE,FALSE,378,445,823,3.697
+22,11481599,Acute respiratory distress syndrome in children with malignancy--can we predict outcome?,yes,yes,TRUE,TRUE,266,305,571,3.404
+23,21669959,Secondhand smoke risk in infants discharged from an NICU: potential for significant health disparities?,yes,yes,TRUE,TRUE,365,245,610,3.523
+24,23806388,Do nomograms designed to predict biochemical recurrence (BCR) do a better job of predicting more clinically relevant prostate cancer outcomes than BCR?,yes,yes,TRUE,TRUE,401,201,602,1.97
+25,17919952,Are reports of mechanical dysfunction in chronic oro-facial pain related to somatisation?,yes,yes,TRUE,TRUE,365,716,1081,3.593
+26,10966943,Amblyopia: is visual loss permanent?,no,no,TRUE,TRUE,261,530,791,2.975
+27,23690198,Implementation of epidural analgesia for labor: is the standard of effective analgesia reachable in all women?,yes,no,TRUE,FALSE,391,776,1167,5.551
+28,17940352,Does HER2 immunoreactivity provide prognostic information in locally advanced urothelial carcinoma patients receiving adjuvant M-VEC chemotherapy?,maybe,yes,TRUE,FALSE,387,658,1045,4.724
+29,20537205,Is halofantrine ototoxic?,yes,yes,TRUE,TRUE,253,166,419,1.742
+30,28707539,Visceral adipose tissue area measurement at a single level: can it represent visceral adipose tissue volume?,yes,yes,TRUE,TRUE,258,266,524,1.849
+31,7482275,Necrotizing fasciitis: an indication for hyperbaric oxygenation therapy?,no,maybe,TRUE,FALSE,341,499,840,3.215
+32,24183388,Is the Hawkins sign able to predict necrosis in fractures of the neck of the astragalus?,maybe,yes,TRUE,FALSE,315,459,774,5.247
+33,9645785,Is a mandatory general surgery rotation necessary in the surgical clerkship?,no,no,TRUE,TRUE,185,153,338,2.163
+34,26298839,Is Acupuncture Efficacious for Treating Phonotraumatic Vocal Pathologies?,yes,yes,TRUE,TRUE,411,668,1079,6.92
+35,24153338,Is aneurysm repair justified for the patients aged 80 or older after aneurysmal subarachnoid hemorrhage?,yes,yes,TRUE,TRUE,336,302,638,2.711
+36,18534072,Do general practice characteristics influence uptake of an information technology (IT) innovation in primary care?,no,no,TRUE,TRUE,356,957,1313,9.282
+37,8847047,Prognosis of well differentiated small hepatocellular carcinoma--is well differentiated hepatocellular carcinoma clinically early cancer?,no,no,TRUE,TRUE,364,812,1176,6.957
+38,10575390,Do follow-up recommendations for abnormal Papanicolaou smears influence patient adherence?,no,yes,TRUE,FALSE,436,330,766,2.682
+39,20084845,Biomolecular identification of allergenic pollen: a new perspective for aerobiological monitoring?,yes,yes,TRUE,TRUE,318,348,666,3.227
+40,15703931,Does diabetes mellitus influence the efficacy of FDG-PET in the diagnosis of cervical cancer?,no,no,TRUE,TRUE,475,300,775,2.576
+41,18269157,Biomechanical and wound healing characteristics of corneas after excimer laser keratorefractive surgery: is there a difference between advanced surface ablation and sub-Bowman's keratomileusis?,yes,yes,TRUE,TRUE,466,654,1120,4.763
+42,25489696,Does radiotherapy of the primary rectal cancer affect prognosis after pelvic exenteration for recurrent rectal cancer?,yes,yes,TRUE,TRUE,409,238,647,2.025
+43,14599616,Can a practicing surgeon detect early lymphedema reliably?,maybe,maybe,TRUE,TRUE,267,536,803,3.822
+44,22537902,Colorectal cancer with synchronous liver metastases: does global management at the same centre improve results?,no,no,TRUE,TRUE,412,587,999,3.952
+45,19054501,Is motion perception deficit in schizophrenia a consequence of eye-tracking abnormality?,yes,no,TRUE,FALSE,305,828,1133,6.25
+46,16432652,Transgastric endoscopic splenectomy: is it possible?,yes,yes,TRUE,TRUE,371,187,558,2.563
+47,19504993,It's Fournier's gangrene still dangerous?,yes,yes,TRUE,TRUE,265,225,490,2.037
+48,20571467,Is it appropriate to implant kidneys from elderly donors in young recipients?,yes,yes,TRUE,TRUE,444,445,889,4.714
+49,24237112,Do provider service networks result in lower expenditures compared with HMOs or primary care case management in Florida's Medicaid program?,yes,maybe,TRUE,FALSE,324,1145,1469,9.539
+50,21402341,Assessment of carotid artery stenosis before coronary artery bypass surgery. Is it always necessary?,no,no,TRUE,TRUE,412,367,779,2.643
+51,20082356,Should direct mesocolon invasion be included in T4 for the staging of gastric cancer?,maybe,maybe,TRUE,TRUE,249,523,772,5.08
+52,26606599,Do Surrogates of Injury Severity Influence the Occurrence of Heterotopic Ossification in Fractures of the Acetabulum?,maybe,no,TRUE,FALSE,455,283,738,2.348
+53,11340218,Does pretreatment with statins improve clinical outcome after stroke?,no,maybe,TRUE,FALSE,338,547,885,4.417
+54,25481573,Processing fluency effects: can the content and presentation of participant information sheets influence recruitment and participation for an antenatal intervention?,yes,maybe,TRUE,FALSE,270,298,568,2.214
+55,25277731,Sternal fracture in growing children : A rare and often overlooked fracture?,maybe,maybe,TRUE,TRUE,175,412,587,3.665
+56,25475395,Is there a correlation between androgens and sexual desire in women?,yes,maybe,TRUE,FALSE,390,415,805,3.003
+57,23177368,Does immediate breast reconstruction compromise the delivery of adjuvant chemotherapy?,no,no,TRUE,TRUE,263,217,480,1.648
+58,17179167,Human papillomavirus and pterygium. Is the virus a risk factor?,maybe,maybe,TRUE,TRUE,350,331,681,4.448
+59,14612308,Can PRISM predict length of PICU stay?,no,yes,TRUE,FALSE,313,673,986,8.311
+60,27491658,Can predilatation in transcatheter aortic valve implantation be omitted?,yes,yes,TRUE,TRUE,163,250,413,3.046
+61,19822586,Autoerotic asphyxiation: secret pleasure--lethal outcome?,yes,yes,TRUE,TRUE,338,444,782,4.143
+62,27643961,Major depression and alcohol use disorder in adolescence: Does comorbidity lead to poorer outcomes of depression?,no,maybe,TRUE,FALSE,333,718,1051,6.084
+63,23539689,Cold preparation use in young children after FDA warnings: do concerns still exist?,yes,yes,TRUE,TRUE,213,204,417,2.201
+64,22453060,Does a 4 diagram manual enable laypersons to operate the Laryngeal Mask Supreme®?,yes,yes,TRUE,TRUE,422,185,607,2.436
+65,22227642,Can we measure mesopic pupil size with the cobalt blue light slit-lamp biomicroscopy method?,no,maybe,TRUE,FALSE,470,595,1065,4.714
+66,12380309,Should circumcision be performed in childhood?,no,maybe,TRUE,FALSE,355,480,835,3.749
+67,22186742,Does a colonoscopy after acute diverticulitis affect its management?,no,no,TRUE,TRUE,296,321,617,3.042
+68,22188074,Do instrumental activities of daily living predict dementia at 1- and 2-year follow-up?,yes,yes,TRUE,TRUE,397,176,573,1.647
+69,27989969,Does the Simultaneous Use of a Neuroendoscope Influence the Incidence of Ventriculoperitoneal Shunt Infection?,no,no,TRUE,TRUE,431,313,744,3.095
+70,18607272,"Body perception: do parents, their children, and their children's physicians perceive body image differently?",yes,yes,TRUE,TRUE,380,296,676,2.549
+71,18235194,Is a specialised training of phonological awareness indicated in every preschool child?,maybe,no,TRUE,FALSE,188,311,499,2.556
+72,18049437,Is there any relationship between streptococcal infection and multiple sclerosis?,yes,maybe,TRUE,FALSE,227,445,672,4.781
+73,15597845,Is the combination with 2-methoxyestradiol able to reduce the dosages of chemotherapeutices in the treatment of human ovarian cancer?,yes,maybe,TRUE,FALSE,302,579,881,4.145
+74,24996865,Assessing joint line positions by means of the contralateral knee: a new approach for planning knee revision surgery?,yes,yes,TRUE,TRUE,298,462,760,4.495
+75,23361217,Does the type of tibial component affect mechanical alignment in unicompartmental knee replacement?,yes,yes,TRUE,TRUE,330,304,634,3.663
+76,17489316,Is tumour expression of VEGF associated with venous invasion and survival in pT3 renal cell carcinoma?,maybe,maybe,TRUE,TRUE,269,1142,1411,11.558
+77,14518645,Injury and poisoning mortality among young men--are there any common factors amenable to prevention?,yes,maybe,TRUE,FALSE,271,569,840,6.783
+78,20337202,Continuation of pregnancy after antenatal corticosteroid administration: opportunity for rescue?,maybe,yes,TRUE,FALSE,306,610,916,4.569
+79,26449554,Does either obesity or OSA severity influence the response of autotitrating CPAP machines in very obese subjects?,yes,yes,TRUE,TRUE,407,550,957,4.35
+80,26215326,Does the clinical presentation of a prior preterm birth predict risk in a subsequent pregnancy?,yes,yes,TRUE,TRUE,394,247,641,2.459
+81,29112560,Is the Distance Worth It?,yes,yes,TRUE,TRUE,453,336,789,3.311
+82,24315783,Aripiprazole: a new risk factor for pathological gambling?,yes,yes,TRUE,TRUE,257,316,573,2.505
+83,9381529,Immune suppression by lysosomotropic amines and cyclosporine on T-cell responses to minor and major histocompatibility antigens: does synergy exist?,yes,yes,TRUE,TRUE,467,212,679,2.278
+84,8985020,Does induction chemotherapy have a role in the management of nasopharyngeal carcinoma?,yes,yes,TRUE,TRUE,608,377,985,4.055
+85,26708803,Treatment of contralateral hydrocele in neonatal testicular torsion: Is less more?,maybe,yes,TRUE,FALSE,436,236,672,2.156
+86,22427593,"Are normally sighted, visually impaired, and blind pedestrians accurate and reliable at making street crossing decisions?",maybe,maybe,TRUE,TRUE,326,600,926,4.612
+87,11570976,Is it Crohn's disease?,maybe,maybe,TRUE,TRUE,193,352,545,3.5
+88,19757704,Is Chaalia/Pan Masala harmful for health?,yes,yes,TRUE,TRUE,432,223,655,2.46
+89,27592038,Does multi-modal cervical physical therapy improve tinnitus in patients with cervicogenic somatic tinnitus?,yes,yes,TRUE,TRUE,405,216,621,1.984
+90,27044366,Detailed analysis of sputum and systemic inflammation in asthma phenotypes: are paucigranulocytic asthmatics really non-inflammatory?,maybe,no,TRUE,FALSE,453,485,938,3.462
+91,9792366,Is HIV/STD control in Jamaica making a difference?,yes,maybe,TRUE,FALSE,516,653,1169,5.703
+92,17562682,Is Panton-Valentine leucocidin associated with the pathogenesis of Staphylococcus aureus bacteraemia in the UK?,maybe,maybe,TRUE,TRUE,414,394,808,3.681
+93,15800018,Are even impaired fasting blood glucose levels preoperatively associated with increased mortality after CABG surgery?,yes,maybe,TRUE,FALSE,429,700,1129,6.601
+94,14978612,Does positron emission tomography change management in primary rectal cancer?,yes,yes,TRUE,TRUE,370,298,668,3.236
+95,18843057,Can you deliver accurate tidal volume by manual resuscitator?,no,no,TRUE,TRUE,357,244,601,2.131
+96,23076787,Can increases in the cigarette tax rate be linked to cigarette retail prices?,no,no,TRUE,TRUE,222,212,434,2.002
+97,9199905,Vertical lines in distal esophageal mucosa (VLEM): a true endoscopic manifestation of esophagitis in children?,yes,yes,TRUE,TRUE,380,648,1028,4.607
+98,23999452,Does hypoglycaemia increase the risk of cardiovascular events?,yes,yes,TRUE,TRUE,515,268,783,3.302
+99,22534881,Does the radiographic transition zone correlate with the level of aganglionosis on the specimen in Hirschsprung's disease?,no,no,TRUE,TRUE,331,623,954,7.829
+100,24785562,Is dexamethasone an effective alternative to oral prednisone in the treatment of pediatric asthma exacerbations?,yes,yes,TRUE,TRUE,330,191,521,2.611
+정확도,69%,,,,,,,,,
