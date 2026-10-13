@@ -1,0 +1,25 @@
+.venv/
+.venv.copied-backup-*/
+.env
+__pycache__/
+*.pyc
+
+# Local secrets (only the empty example is shared)
+.env.*
+!.env.example
+
+# Local backups, editor settings and caches
+backups/
+.vscode/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.DS_Store
+Thumbs.db
+
+# 새 실험 결과는 로컬에 보관하고, 포스팅에 사용한 대표 결과만 선별하여 추가
+results/**
+
+# 개인 확인용 스크립트(GitHub 공개 대상 아님)
+/main.py
+/inspect_pubmedqa.py
